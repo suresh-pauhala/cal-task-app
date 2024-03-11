@@ -1,3 +1,4 @@
+//ClickedInfo.js
 import React from "react";
 
 const ClickedInfo = () => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const DayBox = ({ offset }) => {
+const DayBox = ({ offset, onAddTask }) => {
   const navigate = useNavigate();
   const [titles, setTitles] = useState(["", "", "", ""]); // Default empty titles
   const [added, setAdded] = useState(false); // State to track whether titles have been added
@@ -23,16 +23,16 @@ const DayBox = ({ offset }) => {
 
   const handleAddTask = () => {
     if (!added) {
-      // Construct JSON object containing all titles
       const date = new Date();
       date.setDate(date.getDate() + offset);
       const jsonData = JSON.stringify({
         date: date.toISOString().split("T")[0],
         titles: titles.filter((title) => title !== ""), // Filter out empty titles
       });
-
-      // Send jsonData to backend (replace this with your actual backend endpoint)
-      fetch("http://localhost:8000/titles", {
+      //show MasterData
+      onAddTask(offset, titles);
+      //Post Data
+      fetch("http://localhost:8000/weekly_workout_summary", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,8 +40,9 @@ const DayBox = ({ offset }) => {
         body: jsonData,
       })
         .then((response) => {
-          console.log("Data sent successfully!");
+          return response.json();
         })
+        .then((data) => console.log(data))
         .catch((error) => {
           console.error("Error sending data:", error);
         });
@@ -62,15 +63,18 @@ const DayBox = ({ offset }) => {
     <div className="day-box">
       <div className="date">{formattedDate}</div>
       {added // If titles are added, render clickable buttons
-        ? titles.map((title, index) => (
-            <button
-              key={index}
-              className="button-13"
-              onClick={() => handleTitleClick(title)}
-            >
-              {title || "No Title"} {/* Show "No Title" if title is empty */}
-            </button>
-          ))
+        ? titles.map(
+            (title, index) =>
+              title && (
+                <button
+                  key={index}
+                  className="button-13"
+                  onClick={() => handleTitleClick(title)}
+                >
+                  {title} {/* Show the title */}
+                </button>
+              )
+          )
         : // If titles are not added, render input fields
           titles.map((title, index) => (
             <input
