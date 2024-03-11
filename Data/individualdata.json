@@ -1,0 +1,22 @@
+{
+  "workouts": [
+    {
+      "name": "Standing Dumbbell Curl",
+      "description": "Stand up straight with a dumbbell in each hand at arm's length. Keep your elbows close to your torso and rotate the palms of your hands until they are facing forward. Now, keeping the upper arms stationary, exhale and curl the weights while contracting your biceps. Continue to raise the weights until your biceps are fully contracted and the dumbbells are at shoulder level. Hold the contracted position for a brief pause as you squeeze your biceps. Then, inhale and slowly begin to lower the dumbbells back to the starting position.",
+      "repetitions": "Recommended amount",
+      "calories_burned": "Approximately 100 calories per 15 minutes depending on weight and intensity"
+    },
+    {
+      "name": "Hammer Curls",
+      "description": "Stand up with your torso upright and a dumbbell on each hand being held at arms length. The elbows should be close to the torso. The palms of the hands should be facing your torso. While holding the upper arm stationary, curl the weights while contracting the biceps as you breathe out. Continue the movement until your biceps are fully contracted and the dumbbells are at shoulder level. Slowly begin to bring the dumbbells back to starting position as your breathe in.",
+      "repetitions": "Recommended amount",
+      "calories_burned": "Approximately 88 calories per 15 minutes depending on weight and intensity"
+    },
+    {
+      "name": "Preacher Curl",
+      "description": "Start by setting up your preacher bench and selecting a barbell of the appropriate weight. Sit down on the preacher bench and rest the back of your triceps on the pad. Grab the barbell with your palms facing upward (supine grip). There should be about a shoulder width distance between your hands. Lift the barbell upwards in a curling motion until your hands are at shoulder height. Slowly lower the barbell back down to the full extension position while maintaining control.",
+      "repetitions": "Recommended amount",
+      "calories_burned": "Approximately 120 calories per 15 minutes depending on weight and intensity"
+    }
+  ]
+}
