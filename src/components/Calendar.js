@@ -22,13 +22,13 @@ const Calendar = () => {
     }
   };
 
-  const handleAddTask = (offset, titles) => {
+  const handleAddTask = (offset, { id, title }) => {
     // Construct JSON object containing all titles
     const date = new Date();
     date.setDate(date.getDate() + offset);
     const jsonData = JSON.stringify({
       date: date.toISOString().split("T")[0],
-      titles: titles.filter((title) => title !== ""), // Filter out empty titles
+      title: title, // Filter out empty titles
     });
 
     fetch("http://localhost:8000/weekly_workout_summary")
