@@ -57,17 +57,17 @@
 
 /* Add Task Button */
 .add-task-button {
-  background-color: rgb(2 132 199);
+  background-color: rgb(255, 255, 255);
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
+  padding: 0.01rem 0.05rem;
+  border-radius: 22px;
   cursor: pointer;
   outline: none;
   margin-top: auto;
 }
 .add-task-button:hover {
-  background-color: rgb(3 105 161);
+  background-color: rgb(255, 255, 255);
 }
 
 .date {
@@ -151,6 +151,7 @@
   vertical-align: middle;
   width: 101%;
   margin-bottom: 5%;
+  margin-top: 4.5%;
 }
 
 .button-13:hover {

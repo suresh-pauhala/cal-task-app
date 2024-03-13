@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import AddIcon from "../assets/icons8-success-96.svg";
+import editIcon from "../assets/edit-icon-2375785.svg";
 
 const DayBox = ({ offset, onAddTask }) => {
   const navigate = useNavigate();
@@ -166,7 +168,11 @@ const DayBox = ({ offset, onAddTask }) => {
               className="add-task-button"
               onClick={() => handleAddTask(index)}
             >
-              {titleEditModes[index] ? "Add Task" : "Edit Task"}
+              {titleEditModes[index] ? (
+                <img src={AddIcon} alt="img" height={48} />
+              ) : (
+                <img src={editIcon} alt="img" height={42} width={49} />
+              )}
             </button>
           </div>
         </div>
