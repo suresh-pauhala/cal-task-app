@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import DayBox from "./DayBox";
 import AddDayBox from "./AddDayBox";
 import Titles from "./Titles";
+import DataDisplay from "./DataDisplay";
 
 const Calendar = () => {
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6]); // Initial state with 6 days
-  const [masterData, setMasterData] = useState([]);
+  const [masterData, setMasterData] = useState({});
 
   const handleAddTitles = (titles) => {
     console.log("Titles added:", titles);
@@ -13,8 +14,8 @@ const Calendar = () => {
   };
 
   const addDay = () => {
+    // Check if the number of days is less than 10
     if (days.length < 10) {
-      // Check if the number of days is less than 10
       // Calculate the offset for the new day
       const newDayOffset = days.length;
       // Add the new day to the days array
@@ -31,9 +32,13 @@ const Calendar = () => {
       title: title, // Filter out empty titles
     });
 
-    fetch("http://localhost:8000/weekly_workout_summary")
+    fetch("https://falsk-mongo.onrender.com/master_summary")
       .then((response) => response.json())
-      .then((data) => setMasterData(data));
+      .then((data) => {
+        setMasterData(data);
+        // console.log(data);
+        console.log(masterData);
+      });
   };
 
   return (
@@ -48,30 +53,7 @@ const Calendar = () => {
         <AddDayBox addDay={addDay} />
       </div>
       {/* Render the fetched data table outside the calendar container */}
-      {masterData.length > 0 && (
-        <div className="data-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Body Part</th>
-                <th>Exercise Count</th>
-                <th>Total Calories Burned</th>
-                <th>Protein Intake</th>
-              </tr>
-            </thead>
-            <tbody>
-              {masterData.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.body_part}</td>
-                  <td>{item.exercise_count}</td>
-                  <td>{item.total_calories_burned}</td>
-                  <td>{item.protein_intake}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <DataDisplay data={masterData} />
     </div>
   );
 };

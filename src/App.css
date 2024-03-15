@@ -72,7 +72,7 @@
 
 .date {
   width: 100%;
-  padding: 3px;
+  padding: 2px;
   margin-bottom: 12%;
   font-weight: 400;
   font-size: 20px;
@@ -83,6 +83,11 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s, box-shadow 0.3s;
+  align-self: center;
+}
+.day {
+  padding: 1px;
+  margin: 10px;
 }
 
 /* Add Day Box */

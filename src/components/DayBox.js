@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import AddIcon from "../assets/icons8-success-96.svg";
 import editIcon from "../assets/edit-icon-2375785.svg";
+import PopupContent from "./PopupContent";
 
 const DayBox = ({ offset, onAddTask }) => {
-  const navigate = useNavigate();
   const [titles, setTitles] = useState(["", "", "", ""]); // Default empty titles
   const [titleEditModes, setTitleEditModes] = useState([
     true,
@@ -13,7 +12,6 @@ const DayBox = ({ offset, onAddTask }) => {
     true,
     true,
   ]); // State to track edit mode for each title
-  const [added, setAdded] = useState(false); // State to track whether titles have been added
   const [selectedTitleData, setSelectedTitleData] = useState(null);
   const [popupHeight, setPopupHeight] = useState(null); // State to track popup height
   const [taskIds, setTaskIds] = useState(Array(4).fill(null)); // State to store task IDs
@@ -27,6 +25,15 @@ const DayBox = ({ offset, onAddTask }) => {
     month: "2-digit",
     year: "numeric",
   });
+  const dayOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ][date.getDay()];
 
   const handleTitleChange = (index, value) => {
     const newTitles = [...titles];
@@ -41,7 +48,6 @@ const DayBox = ({ offset, onAddTask }) => {
       // If not in edit mode, set to edit mode
       toggleEditMode(index);
     } else if (titleToSend) {
-      // Check if title is not empty
       // If in edit mode and title is not empty, handle edit task logic here
       console.log(`Adding task for title: ${titleToSend}`);
       const taskId = uuidv4(); // Generate a unique ID for the task
@@ -85,33 +91,6 @@ const DayBox = ({ offset, onAddTask }) => {
       // If title is empty, you can handle it here (e.g., show an error message)
       console.log("Title is empty. Please enter a title.");
     }
-
-    // if (!added) {
-    //   // const date = new Date();
-    //   // date.setDate(date.getDate() + offset);
-    //   // const jsonData = JSON.stringify({
-    //   //   date: date.toISOString().split("T")[0],
-    //   //   titles: titles.filter((title) => title !== ""), // Filter out empty titles
-    //   // });
-    //   //show MasterData
-    //   onAddTask(offset, titles);
-    //   //Post Data
-    //   // fetch("http://localhost:8000/weekly_workout_summary", {
-    //   //   method: "POST",
-    //   //   headers: {
-    //   //     "Content-Type": "application/json",
-    //   //   },
-    //   //   body: jsonData,
-    //   // })
-    //   //   .then((response) => {
-    //   //     return response.json();
-    //   //   })
-    //   //   .then((data) => console.log(data))
-    //   //   .catch((error) => {
-    //   //     console.error("Error sending data:", error);
-    //   //   });
-    // }
-    // setAdded(!added); // Toggle the added state
   };
   const toggleEditMode = (index) => {
     const newEditModes = [...titleEditModes];
@@ -120,21 +99,16 @@ const DayBox = ({ offset, onAddTask }) => {
   };
 
   const handleTitleClick = (title) => {
-    //show current selected date and title
-    // const date = new Date();
-    // date.setDate(date.getDate() + offset);
-    // const clickedData = { date: date.toISOString().split("T")[0], title };
-    // const jsonData = JSON.stringify(clickedData);
-    // localStorage.setItem("clickedData", jsonData); // Store data for new page
-    // navigate("/new-page"); // Redirect to new page using useNavigate
-    fetch("http://localhost:8000/workouts")
+    fetch("https://falsk-mongo.onrender.com/item_summary")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         setSelectedTitleData(data);
         // Calculate popup height based on content
-        const popupContentHeight =
-          document.querySelector(".popup-content").offsetHeight;
+        const popupContentElement = document.querySelector(".popup-content");
+        const popupContentHeight = popupContentElement
+          ? popupContentElement.offsetHeight
+          : null;
         setPopupHeight(popupContentHeight);
       })
       .catch((error) => {
@@ -144,7 +118,10 @@ const DayBox = ({ offset, onAddTask }) => {
 
   return (
     <div className="day-box">
-      <div className="date">{formattedDate}</div>
+      <div className="date">
+        {formattedDate}
+        <p className="day">{dayOfWeek}</p>
+      </div>
       {titles.map((title, index) => (
         <div key={index} className="title-container">
           {titleEditModes[index] ? (
@@ -178,24 +155,11 @@ const DayBox = ({ offset, onAddTask }) => {
         </div>
       ))}
       {selectedTitleData && (
-        <div className="popup" style={{ maxHeight: popupHeight }}>
-          <div className="popup-content">
-            <span
-              className="close-btn"
-              onClick={() => setSelectedTitleData(null)}
-            >
-              &times;
-            </span>
-            {selectedTitleData.map((dataItem, index) => (
-              <div key={index}>
-                <p>Name: {dataItem.name}</p>
-                <p>Description: {dataItem.description}</p>
-                <p>Repetitions: {dataItem.repetitions}</p>
-                <p>Calories Burned: {dataItem.calories_burned}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <PopupContent
+          data={selectedTitleData}
+          popupHeight={popupHeight}
+          setSelectedTitleData={setSelectedTitleData}
+        />
       )}
     </div>
   );

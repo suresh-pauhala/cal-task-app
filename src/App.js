@@ -1,10 +1,10 @@
-//App.js
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/NavBar";
-import ClickedInfo from "./components/ClickedInfo";
-import "./App.css";
 import Calendar from "./components/Calendar";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import "./App.css";
 
 const App = () => {
   return (
@@ -18,10 +18,9 @@ const App = () => {
           </header>
           <main>
             <Routes>
-              <Route path="/">
-                <Route index element={<Calendar />} />
-                <Route path="/new-page" element={<ClickedInfo />} />
-              </Route>
+              <Route path="/" element={<Calendar />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
             </Routes>
           </main>
         </div>
