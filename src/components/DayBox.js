@@ -15,6 +15,9 @@ const DayBox = ({ offset, onAddTask }) => {
   const [selectedTitleData, setSelectedTitleData] = useState(null);
   const [popupHeight, setPopupHeight] = useState(null); // State to track popup height
   const [taskIds, setTaskIds] = useState(Array(4).fill(null)); // State to store task IDs
+  const [taskIdsForButtons, setTaskIdsForButtons] = useState(
+    Array(4).fill(null)
+  ); // State to store task IDs for each button
 
   const date = new Date();
   date.setDate(date.getDate() + offset);
@@ -51,6 +54,10 @@ const DayBox = ({ offset, onAddTask }) => {
       // If in edit mode and title is not empty, handle edit task logic here
       console.log(`Adding task for title: ${titleToSend}`);
       const taskId = uuidv4(); // Generate a unique ID for the task
+      console.log(taskId);
+      const newTaskIdsForButtons = [...taskIdsForButtons];
+      newTaskIdsForButtons[index] = taskId;
+      setTaskIdsForButtons(newTaskIdsForButtons);
 
       // Update state with the new task ID
       setTaskIds((prevIds) => {
@@ -62,16 +69,24 @@ const DayBox = ({ offset, onAddTask }) => {
       const date = new Date();
       date.setDate(date.getDate() + offset);
       const jsonData = JSON.stringify({
-        id: taskId, // Include the unique ID in the data
-        date: date.toISOString().split("T")[0],
-        title: titleToSend, // Send only the selected title
+        item_id: taskId,
+        session_id: "session123",
+        request_date: date.toISOString().split("T")[0],
+        week_reference_id: "week123",
+        user_id: "user123",
+        category: "electronics",
+        item: titleToSend,
+        count: "2",
+        // id: taskId, // Include the unique ID in the data
+        // date: date.toISOString().split("T")[0],
+        // title: titleToSend, // Send only the selected title
       });
 
       //show MasterData
       onAddTask(offset, { id: taskId, title: titleToSend });
 
       // Post Data
-      fetch("http://localhost:8000/weekly_workout_summary", {
+      fetch("https://falsk-mongo.onrender.com/item_summary", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,9 +112,23 @@ const DayBox = ({ offset, onAddTask }) => {
     newEditModes[index] = !newEditModes[index];
     setTitleEditModes(newEditModes);
   };
+  const handleTitleClick = (title, index) => {
+    const buttonId = taskIdsForButtons[index]; // Get the button's ID based on the index
+    // fetch(`https://falsk-mongo.onrender.com/item_summary?item_id=${buttonId}`)
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "text/plain");
 
-  const handleTitleClick = (title) => {
-    fetch("https://falsk-mongo.onrender.com/item_summary")
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+
+      redirect: "follow",
+    };
+
+    fetch(
+      `https://falsk-mongo.onrender.com/item_summary?item_id=${buttonId}`,
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -114,6 +143,23 @@ const DayBox = ({ offset, onAddTask }) => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+
+    // const myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "text/plain");
+
+    // const itemId = "ef74a513-f4d9-4bef-bb86-deb199b66ded";
+    // const url = `https://falsk-mongo.onrender.com/item_summary?item_id=${itemId}`;
+
+    // const requestOptions = {
+    //   method: "GET",
+    //   headers: myHeaders,
+    //   redirect: "follow",
+    // };
+
+    // fetch(url, requestOptions)
+    //   .then((response) => response.text())
+    //   .then((result) => console.log(result))
+    //   .catch((error) => console.error(error));
   };
 
   return (
@@ -135,7 +181,7 @@ const DayBox = ({ offset, onAddTask }) => {
           ) : (
             <button
               className="button-13"
-              onClick={() => handleTitleClick(title)}
+              onClick={() => handleTitleClick(title, index)}
             >
               {title}
             </button>

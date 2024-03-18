@@ -6,11 +6,12 @@ import DataDisplay from "./DataDisplay";
 
 const Calendar = () => {
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6]); // Initial state with 6 days
-  const [masterData, setMasterData] = useState({});
+  // const [taskIdsByDay, setTaskIdsByDay] = useState({}); // State to store task IDs by day
+  const [masterData, setMasterData] = useState({}); // State to store fetched data
 
   const handleAddTitles = (titles) => {
     console.log("Titles added:", titles);
-    // implement logic to handle the added titles here
+    // Implement logic to handle the added titles here
   };
 
   const addDay = () => {
@@ -20,6 +21,11 @@ const Calendar = () => {
       const newDayOffset = days.length;
       // Add the new day to the days array
       setDays([...days, newDayOffset]);
+      // Initialize task IDs for the new day
+      // setTaskIdsByDay((prevTaskIds) => ({
+      //   ...prevTaskIds,
+      //   [newDayOffset]: [],
+      // }));
     }
   };
 
@@ -32,12 +38,22 @@ const Calendar = () => {
       title: title, // Filter out empty titles
     });
 
-    fetch("https://falsk-mongo.onrender.com/master_summary")
+    const week_reference_id = "week123";
+    const session_id = "session1234";
+
+    fetch(
+      `https://falsk-mongo.onrender.com/master_summary?week_reference_id=${week_reference_id}&session_id=${session_id}`
+    )
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
+        // Update task IDs for the day with the fetched data
+        // setTaskIdsByDay((prevTaskIds) => ({
+        //   ...prevTaskIds,
+        //   [offset]: [...prevTaskIds[offset], id],
+        // }));
+        // Update master data with the fetched data
         setMasterData(data);
-        // console.log(data);
-        console.log(masterData);
       });
   };
 
@@ -46,7 +62,12 @@ const Calendar = () => {
       <div className="calendar">
         {/* Day boxes */}
         {days.map((offset) => (
-          <DayBox key={offset} offset={offset} onAddTask={handleAddTask} />
+          <DayBox
+            key={offset}
+            offset={offset}
+            onAddTask={(taskId, title) => handleAddTask(offset, taskId, title)}
+            //taskIds={taskIdsByDay[offset] || []} // Pass task IDs for the day
+          />
         ))}
         <Titles onAddTitles={handleAddTitles} />
         {/* Box to add further days */}
