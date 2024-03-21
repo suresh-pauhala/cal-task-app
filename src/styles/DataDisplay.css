@@ -5,7 +5,7 @@
 }
 
 .weekly-summary-heading {
-  width: 30%;
+  width: 75%;
   margin: 0 auto; /* Center horizontally */
   text-align: center; /* Center text */
   font-size: 24px;
@@ -17,18 +17,19 @@
 
 .data-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  flex-wrap: wrap; /* Allow cards to wrap to the next row */
+  justify-content: space-between; /* Distribute space between cards */
+  /* gap: 50px; */
   margin: 0 auto; /* Center the container horizontally */
 }
 
 .category-card {
   background-color: #ffffff;
+  margin: 1%;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 95%; /* Set width to 100% */
+  width: calc(25% - 20px); /* Set width for each card, considering the gap */
   transition: transform 0.3s ease;
   margin-bottom: 20px; /* Add margin bottom for spacing between rows */
   text-align: center;

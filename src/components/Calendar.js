@@ -4,6 +4,7 @@ import AddDayBox from "./AddDayBox";
 import Titles from "./Titles";
 import DataDisplay from "./DataDisplay";
 import { v4 as uuidv4 } from "uuid";
+import Spinner from "../components/Spinner";
 
 const Calendar = () => {
   const [sessionId] = useState(uuidv4());
@@ -11,6 +12,9 @@ const Calendar = () => {
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6]); // Initial state with 6 days
   // const [taskIdsByDay, setTaskIdsByDay] = useState({}); // State to store task IDs by day
   const [masterData, setMasterData] = useState({}); // State to store fetched data
+  const [isLoadingPopup, setIsLoadingPopup] = useState(false); // State to track loading of popup data
+  const [dataLoadingError, setDataLoadingError] = useState(false);
+  const [masterDataFlag, setMasterDataFlag] = useState(false);
 
   const handleAddTitles = (titles) => {
     console.log("Titles added:", titles);
@@ -33,6 +37,9 @@ const Calendar = () => {
   };
 
   const handleAddTask = (offset, { id, title }) => {
+    setDataLoadingError(false);
+    setIsLoadingPopup(true);
+
     // Construct JSON object containing all titles
     const date = new Date();
     date.setDate(date.getDate() + offset);
@@ -48,6 +55,7 @@ const Calendar = () => {
     )
       .then((response) => response.json())
       .then((data) => {
+        setMasterDataFlag(true);
         console.log(data);
         // Update task IDs for the day with the fetched data
         // setTaskIdsByDay((prevTaskIds) => ({
@@ -55,8 +63,17 @@ const Calendar = () => {
         //   [offset]: [...prevTaskIds[offset], id],
         // }));
         // Update master data with the fetched data
+        setIsLoadingPopup(false);
         setMasterData(data);
       });
+    setTimeout(() => {
+      setIsLoadingPopup(false);
+      if (masterDataFlag) {
+        setDataLoadingError(false);
+      } else {
+        setDataLoadingError(true);
+      }
+    }, 10000);
   };
 
   return (
@@ -76,6 +93,12 @@ const Calendar = () => {
         {/* Box to add further days */}
         <AddDayBox addDay={addDay} />
       </div>
+      {isLoadingPopup && <Spinner />}
+      {dataLoadingError && (
+        <p style={{ color: "red", textAlign: "center", fontSize: "20px" }}>
+          Server is taking too long time to load please try again later
+        </p>
+      )}
       {/* Render the fetched data table outside the calendar container */}
       <DataDisplay data={masterData} />
     </div>
