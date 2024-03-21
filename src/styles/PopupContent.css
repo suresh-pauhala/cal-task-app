@@ -1,0 +1,74 @@
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95); /* Lighter background color */
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  z-index: 1000;
+  overflow-x: auto; /* Make the popup horizontally scrollable */
+  max-height: calc(
+    100vh - 20px
+  ); /* Adjust max-height as per your requirement */
+  max-width: calc(100vw - 20px); /* Adjust max-width as per your requirement */
+  width: auto; /* Set width to auto */
+}
+
+.popup-content {
+  position: relative;
+  background-color: white;
+  color: #333; /* Dark text color */
+  padding: 20px;
+  border-radius: 12px;
+  width: auto; /* Set width to auto */
+  margin: auto;
+  max-width: 90vw; /* Adjust max-width for smaller devices */
+  overflow-x: auto; /* Allow horizontal scrolling if content exceeds max-width */
+  border: 1px solid #ddd; /* Light border */
+}
+
+.close-btn {
+  position: absolute; /* Position relative to popup content */
+  top: 10px; /* Adjust distance from top */
+  right: 10px; /* Adjust distance from right */
+  cursor: pointer;
+  font-size: 24px; /* Increase font size */
+  color: #999; /* Light grey color */
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+.ingredients-list {
+  list-style-type: none; /* Remove bullet points */
+  padding-left: 0;
+  /* Remove default padding */
+}
+
+.ingredients-list li {
+  margin-bottom: 8px; /* Adjust margin between items */
+  text-align: left; /* Align list items to the left */
+  margin-left: 5%;
+}
+
+.ingredients-list li strong {
+  font-weight: bold; /* Make ingredient item bold */
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 20px; /* Increase font size */
+  background-color: rgb(23, 137, 224);
+  color: white;
+  border-radius: 5px;
+  padding: 1%;
+  width: 40%;
+  margin: auto;
+}
+
+p {
+  margin-bottom: 8px;
+  font-size: 14px; /* Increase font size */
+}
