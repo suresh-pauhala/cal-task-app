@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import AddIcon from "../assets/icons8-success-96.svg";
 import editIcon from "../assets/edit-icon-2375785.svg";
 import PopupContent from "./PopupContent";
 import Spinner from "../components/Spinner";
+import DataLoadingError from "./DataLoadingError";
 
 const DayBox = ({ offset, onAddTask, sessionId }) => {
   const [titles, setTitles] = useState(["", "", "", ""]); // Default empty titles
@@ -19,9 +20,8 @@ const DayBox = ({ offset, onAddTask, sessionId }) => {
   const [taskIdsForButtons, setTaskIdsForButtons] = useState(
     Array(4).fill(null)
   ); // State to store task IDs for each button
-  const [isLoadingPopup, setIsLoadingPopup] = useState(false); // State to track loading of popup data
+  const [isLoadingPopup, setIsLoading] = useState(false); // State to track loading of popup data
   const [dataLoadingError, setDataLoadingError] = useState(false);
-  const [popupFlag, setPopupFlag] = useState(false);
 
   const date = new Date();
   date.setDate(date.getDate() + offset);
@@ -41,6 +41,13 @@ const DayBox = ({ offset, onAddTask, sessionId }) => {
     "Friday",
     "Saturday",
   ][date.getDay()];
+
+  useEffect(() => {
+    // Reset error state when component unmounts or offset changes
+    return () => {
+      setDataLoadingError(false);
+    };
+  }, [offset]);
 
   const handleTitleChange = (index, value) => {
     const newTitles = [...titles];
@@ -119,7 +126,7 @@ const DayBox = ({ offset, onAddTask, sessionId }) => {
   const handleTitleClick = (title, index) => {
     const buttonId = taskIdsForButtons[index]; // Get the button's ID based on the index
     // fetch(`https://falsk-mongo.onrender.com/item_summary?item_id=${buttonId}`)
-    setIsLoadingPopup(true);
+    setIsLoading(true);
     setDataLoadingError(false);
 
     handleAddTask(offset, { id: buttonId, title: title });
@@ -142,29 +149,19 @@ const DayBox = ({ offset, onAddTask, sessionId }) => {
       .then((data) => {
         console.log(data);
         setSelectedTitleData(data);
-        setPopupFlag(true);
         // Calculate popup height based on content
         const popupContentElement = document.querySelector(".popup-content");
         const popupContentHeight = popupContentElement
           ? popupContentElement.offsetHeight
           : null;
         setPopupHeight(popupContentHeight);
-        setDataLoadingError(false);
-        setIsLoadingPopup(false);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        setDataLoadingError(false);
-      });
-
-    setTimeout(() => {
-      setIsLoadingPopup(false);
-      if (popupFlag) {
-        setDataLoadingError(false);
-      } else {
+        setIsLoading(false);
         setDataLoadingError(true);
-      }
-    }, 10000);
+      });
 
     // const myHeaders = new Headers();
     // myHeaders.append("Content-Type", "text/plain");
@@ -228,11 +225,7 @@ const DayBox = ({ offset, onAddTask, sessionId }) => {
         </div>
       ))}
       {isLoadingPopup && <Spinner />}
-      {dataLoadingError && (
-        <p style={{ color: "red", textAlign: "center", fontSize: "20px" }}>
-          Server is taking too long time to load
-        </p>
-      )}
+      {dataLoadingError && <DataLoadingError />}
       {selectedTitleData && (
         <PopupContent
           data={selectedTitleData}
