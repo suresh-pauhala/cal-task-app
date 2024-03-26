@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import AddIcon from "../assets/icons8-success-96.svg";
+import AddIcon from "../assets/sucess.svg";
 import editIcon from "../assets/edit-icon-2375785.svg";
 import PopupContent from "./PopupContent";
 import Spinner from "../components/Spinner";
 import DataLoadingError from "./DataLoadingError";
 
-const DayBox = ({ offset, onAddTask, sessionId }) => {
+const DayBox = ({ offset, onAddTask, sessionId, isFirstDay }) => {
   const [titles, setTitles] = useState(["", "", "", ""]); // Default empty titles
   const [titleEditModes, setTitleEditModes] = useState([
     true,
@@ -162,29 +162,13 @@ const DayBox = ({ offset, onAddTask, sessionId }) => {
         setIsLoading(false);
         setDataLoadingError(true);
       });
-
-    // const myHeaders = new Headers();
-    // myHeaders.append("Content-Type", "text/plain");
-
-    // const itemId = "ef74a513-f4d9-4bef-bb86-deb199b66ded";
-    // const url = `https://falsk-mongo.onrender.com/item_summary?item_id=${itemId}`;
-
-    // const requestOptions = {
-    //   method: "GET",
-    //   headers: myHeaders,
-    //   redirect: "follow",
-    // };
-
-    // fetch(url, requestOptions)
-    //   .then((response) => response.text())
-    //   .then((result) => console.log(result))
-    //   .catch((error) => console.error(error));
   };
 
   return (
-    <div className="day-box">
+    <div className={`day-box${isFirstDay ? " first-day" : ""}`}>
       <div className="date">
         {formattedDate}
+        {isFirstDay && <p className="day-header">Today</p>}
         <p className="day">{dayOfWeek}</p>
       </div>
       {titles.map((title, index) => (
@@ -214,11 +198,21 @@ const DayBox = ({ offset, onAddTask, sessionId }) => {
                 <img
                   src={AddIcon}
                   alt="img"
-                  height={35}
-                  style={{ margin: "2px", padding: "2px" }}
+                  height={26}
+                  width={30}
+                  style={{ paddingTop: "7%" }}
                 />
               ) : (
-                <img src={editIcon} alt="img" height={32} width={44} />
+                // <div className="check"></div>
+                // <div className="check"></div>
+
+                <img
+                  src={editIcon}
+                  alt="img"
+                  height={26}
+                  width={30}
+                  style={{ paddingTop: "7%" }}
+                />
               )}
             </button>
           </div>
@@ -234,6 +228,58 @@ const DayBox = ({ offset, onAddTask, sessionId }) => {
         />
       )}
     </div>
+    // <div className="day-box">
+    //   <div className="date">
+    //     {formattedDate}
+    //     <p className="day">{dayOfWeek}</p>
+    //   </div>
+    //   {titles.map((title, index) => (
+    //     <div key={index} className="title-container">
+    //       {titleEditModes[index] ? (
+    //         <input
+    //           type="text"
+    //           value={title}
+    //           onChange={(e) => handleTitleChange(index, e.target.value)}
+    //           placeholder={`Title ${index + 1}`}
+    //           className="title-input"
+    //         />
+    //       ) : (
+    //         <button
+    //           className="button-13"
+    //           onClick={() => handleTitleClick(title, index)}
+    //         >
+    //           {title}
+    //         </button>
+    //       )}
+    //       <div>
+    //         <button
+    //           className="add-task-button"
+    //           onClick={() => handleAddTask(index)}
+    //         >
+    //           {titleEditModes[index] ? (
+    //             <img
+    //               src={AddIcon}
+    //               alt="img"
+    //               height={35}
+    //               style={{ margin: "2px", padding: "2px" }}
+    //             />
+    //           ) : (
+    //             <img src={editIcon} alt="img" height={32} width={44} />
+    //           )}
+    //         </button>
+    //       </div>
+    //     </div>
+    //   ))}
+    //   {isLoadingPopup && <Spinner />}
+    //   {dataLoadingError && <DataLoadingError />}
+    //   {selectedTitleData && (
+    //     <PopupContent
+    //       data={selectedTitleData}
+    //       popupHeight={popupHeight}
+    //       setSelectedTitleData={setSelectedTitleData}
+    //     />
+    //   )}
+    // </div>
   );
 };
 

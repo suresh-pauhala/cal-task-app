@@ -1,0 +1,42 @@
+.navbar {
+  /* position: fixed; */
+  top: 0; /* Stick it to the top of the viewport */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(7 89 133);
+  padding: 20px;
+  width: 100%;
+  opacity: 95%;
+  z-index: 1000;
+}
+
+.logo h1 {
+  color: #fff;
+  margin: 2%;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding-right: 5%;
+}
+
+.nav-links li {
+  margin-right: 8%;
+}
+
+.nav-links li:last-child {
+  margin-right: 0;
+}
+
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #ffc107;
+}

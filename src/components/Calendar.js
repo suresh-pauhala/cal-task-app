@@ -69,12 +69,13 @@ const Calendar = () => {
     <div>
       <div className="calendar">
         {/* Day boxes */}
-        {days.map((offset) => (
+        {days.map((offset, index) => (
           <DayBox
             key={offset}
             offset={offset}
             sessionId={sessionId}
             onAddTask={(taskId, title) => handleAddTask(offset, taskId, title)}
+            isFirstDay={index === 0}
             //taskIds={taskIdsByDay[offset] || []} // Pass task IDs for the day
           />
         ))}
